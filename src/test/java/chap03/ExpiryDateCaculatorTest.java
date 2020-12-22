@@ -105,4 +105,22 @@ public class ExpiryDateCaculatorTest {
                 , LocalDate.of(2019, 7 ,31));
     }
 
+    @Test
+    void paidTenManwonIsAYearService(){
+        assertExpiryDate(PayData.builder().billingDate(LocalDate.of(2019, 1, 28)).payment(100_000).build(), LocalDate.of(2020, 1, 28));
+    }
+
+    @DisplayName("윤달")
+    @Test
+    void leafMonth(){
+        assertExpiryDate(PayData.builder().billingDate(LocalDate.of(2020, 2, 29)).payment(100_000).build(), LocalDate.of(2021, 2, 28));
+    }
+
+    @Test
+    void moreThen100_000(){
+        assertExpiryDate(PayData.builder().billingDate(LocalDate.of(2020, 1, 15)).payment(130_000).build(), LocalDate.of(2021, 4, 15));
+        assertExpiryDate(PayData.builder().billingDate(LocalDate.of(2019, 5, 30)).payment(260_000).build(), LocalDate.of(2021, 11, 30));
+    }
+
+
 }

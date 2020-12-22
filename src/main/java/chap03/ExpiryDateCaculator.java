@@ -5,16 +5,9 @@ import java.time.YearMonth;
 
 public class ExpiryDateCaculator {
 
-    public LocalDate calculateExpireDate(LocalDate billingDate, int payment){
-//        return LocalDate.of(2019,4,1);
-        return billingDate.plusMonths(1);
-    }
-
     public LocalDate calculateExpireDate(PayData payData){
-        //int addedMonths = payData.getPayment() / 10_000;
-
-//        int addedMonths = payData.getPayment() == 100_000 ? 12 : payData.getPayment() / 10_000;
         int addedMonths = monthCalculator(payData.getPayment());
+
         if(payData.getFirstBillingDate() != null) {
             return expiryDateUsingFirstBillingDate(payData, addedMonths);
         }else{
@@ -24,12 +17,11 @@ public class ExpiryDateCaculator {
 
     private LocalDate expiryDateUsingFirstBillingDate(PayData payData, int addedMonths){
         LocalDate candidateExp = payData.getBillingDate().plusMonths(addedMonths);
-//        final int dayOfFirstBilling = payData.getFirstBillingDate().getDayOfMonth();
-//        if(dayOfFirstBilling != candidateExp.getDayOfMonth()){
+
           if(isSameDayOfMonth(payData.getFirstBillingDate(), candidateExp)){
-//            final int dayLenOfCandiMon = YearMonth.from(candidateExp).lengthOfMonth();
             final int dayLenOfCandiMon = lastDayOfMonth(candidateExp);
             final int dayOfFirstBilling = payData.getFirstBillingDate().getDayOfMonth();
+
             if(dayLenOfCandiMon < dayOfFirstBilling){
                 return candidateExp.withDayOfMonth(dayLenOfCandiMon);
             }
@@ -54,9 +46,7 @@ public class ExpiryDateCaculator {
             result += 12;
             payment -= 100_000;
         }
-
         result += payment / 10_000;
-
 
         return result;
     }
